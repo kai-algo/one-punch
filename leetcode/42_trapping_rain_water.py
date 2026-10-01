@@ -24,13 +24,20 @@
 - 0 <= height[i] <= 10^5
 """
 
-from typing import List
-
 
 class Solution:
-    def trap(self, height: List[int]) -> int:
-        # 在这里写解答
-        pass
+    def trap(self, height: list[int]) -> int:
+        len_height = len(height)
+        left = [0] * len_height
+        right = [0] * len_height
+        for i in range(1, len_height):
+            left[i] = max(left[i - 1], height[i - 1])
+        for i in range(len_height - 2, -1, -1):
+            right[i] = max(right[i + 1], height[i + 1])
+
+        return sum(
+            max((min(left[i], right[i]) - height[i]), 0) for i in range(len_height)
+        )
 
 
 # ============ 感悟 ============
