@@ -39,8 +39,15 @@ class ListNode:
 
 class Solution:
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        # 在这里写解答
-        pass
+        # 这里其实可以用dummy写，不过正好三个指针可以处理好
+        pre = None
+        cur = head
+        while cur:
+            nxt = cur.next
+            cur.next = pre
+            pre = cur
+            cur = nxt
+        return pre
 
 
 # ============ 感悟 ============
