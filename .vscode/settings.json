@@ -1,0 +1,4 @@
+{
+  // 让项目里的 ruff.toml 优先于编辑器（含用户全局）里的 Ruff 设置
+  "ruff.configurationPreference": "filesystemFirst"
+}

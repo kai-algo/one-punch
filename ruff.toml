@@ -1,0 +1,19 @@
+# 本机 Python 为 3.9，`X | None` 需要 3.10+，所以固定目标版本为 3.9。
+target-version = "py39"
+
+[lint]
+# 显式列出要启用的规则，不依赖 Ruff 版本的默认集合（默认集合会随版本变化，
+# 升级后可能突然冒出新提示）。
+#   E/W: pycodestyle  F: pyflakes  I: import 排序  B: bugbear
+#   UP: pyupgrade（含 UP035：typing.List 已弃用）  N: pep8-naming
+select = ["E", "F", "W", "I", "B", "UP", "N"]
+
+ignore = [
+    "FA100",  # 建议加 `from __future__ import annotations`：LeetCode 提交时不需要
+    "UP007",  # Optional[X] -> X | None：3.9 运行时不支持
+    "UP045",  # 同上
+]
+
+[lint.per-file-ignores]
+# LeetCode 官方签名是驼峰（如 productExceptSelf），不能改成 snake_case
+"leetcode/**" = ["N802", "N803", "N806"]

@@ -1,0 +1,24 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+
+# 工具缓存
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# macOS
+.DS_Store
+
+# 编辑器 / IDE（保留项目共享的 .vscode/settings.json）
+.vscode/*
+!.vscode/settings.json
+.idea/
+
+# Claude Code 本地设置（个人权限等，不共享）
+.claude/settings.local.json
