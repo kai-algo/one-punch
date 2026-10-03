@@ -49,8 +49,16 @@ class ListNode:
 
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        # 在这里写解答
-        pass
+        if not head or not head.next:
+            return False
+        fast, slow = head.next, head
+        while fast.next and fast.next.next:
+            if fast == slow:
+                return True
+            slow = slow.next
+            fast = fast.next.next
+
+        return False
 
 
 # ============ 感悟 ============
@@ -59,7 +67,20 @@ class Solution:
 # 复杂度：时间 O( )  空间 O( )
 #
 # 易错点 / 收获：
-#
+# 1. 起点错开是为了让第一次 fast == slow 不立刻命中。 这迫使你先写 if not head or not head.next 的特判,还要用 fast.next and fast.next.next 这个较长的条件。
+# 2. 标准写法让两个指针都从 head 出发,先移动,再比较。 这样就不需要特判:
+# def hasCycle(self, head: Optional[ListNode]) -> bool:
+#     slow = fast = head
+#     while fast and fast.next:
+#         slow = slow.next
+#         fast = fast.next.next
+#         if slow is fast:
+#             return True
+#     return False
+#    - 空链表时 fast 是 None,循环不进入,直接返回 False。
+#    - 单节点时 fast.next 是 None,同样返回 False。
+#    - 循环条件只需要 fast and fast.next,因为 fast.next.next 取到 None 是允许的,下一轮条件会判断出来。
+# 3. 判断节点是否相同用 is,不要用 ==。 ListNode 没有定义 __eq__,所以现在两者结果一样。但 is 表达的是「同一个对象」,意图更清楚,而且不会被将来加的 __eq__ 影响。
 
 
 # ============ 测试辅助 ============
