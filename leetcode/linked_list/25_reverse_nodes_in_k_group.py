@@ -41,16 +41,87 @@ class ListNode:
 
 class Solution:
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        # 在这里写解答
-        pass
+        # 翻转 left..right 这一段（闭区间），就是 206 的迭代翻转，
+        # 只是遇到 right 就停；翻转后 left.next 变成 None，由外面接回去
+        def reverseLink(left, right):
+            prev = None
+            cur = left
+            while cur:
+                nxt = cur.next
+                cur.next = prev
+                if cur is right:
+                    break
+                prev = cur
+                cur = nxt
+
+        # dummy 处理「头节点会变」的问题
+        head_dummy = ListNode()
+        # prev：上一组翻转后的尾节点（第一组之前就是 dummy），用来接这一组的新头
+        prev = head_dummy
+        # left：当前组的头；right：向后探路的指针，count 数够 k 个就说明凑成一组
+        left = head
+        right = head
+        count = 0
+        while right:
+            count += 1
+            if count % k == 0:
+                # 先记下下一组的头，翻转会断开 right.next
+                nxt = right.next
+                # 翻转
+                reverseLink(left, right)
+                # 和整体链接：
+                # 上一组的尾 -> 这一组翻转后的新头(right)
+                prev.next = right
+                # 这一组翻转后的新尾(left) -> 下一组的头
+                left.next = nxt
+                # 移动指针：
+                # 这一组的新尾成为下一组的 prev
+                prev = left
+                # right 设成 left，这样下面的 right = right.next 刚好走到 nxt
+                right = left
+                # 下一组的头
+                left = nxt
+
+            right = right.next
+
+        # 不够 k 个的尾部不进入 if，保持原样，已经被上一组的 left.next = nxt 接住
+        return head_dummy.next
 
 
 # ============ 感悟 ============
 # 思路：
+# 每一组都是「数够 k 个 -> 翻转 -> 接回去」三步，思路清晰最重要。
+# 我的写法（单次扫描）：right 向后走并计数，count 是 k 的倍数时凑成一组，
+#   用 206 的迭代翻转翻 left..right，再把 prev(上一组尾) -> right(新头)、
+#   left(新尾) -> nxt(下一组头) 接上，然后移动 prev / left / right。
+#   尾部不足 k 个时不进 if，保持原样。
 #
-# 复杂度：时间 O( )  空间 O( )
+# 另一种写法（先找尾、再翻转，三步分开写，更好讲清楚）：
+#   def reverseKGroup(self, head, k):
+#       dummy = ListNode(next=head)
+#       pre = dummy                      # 上一组的尾节点
+#       while True:
+#           tail = pre
+#           for _ in range(k):           # 先数够 k 个，不够就直接结束
+#               tail = tail.next
+#               if not tail:
+#                   return dummy.next
+#           nxt = tail.next
+#           group_head = pre.next
+#           prev, cur = nxt, group_head  # prev 初值是 nxt，翻转后尾节点自动接上
+#           while cur is not nxt:
+#               cur.next, prev, cur = prev, cur, cur.next
+#           pre.next = tail              # 上一组接到翻转后的新头
+#           pre = group_head             # 原来的头现在是这一组的尾
+#
+# 复杂度：时间 O(n)  空间 O(1)
 #
 # 易错点 / 收获：
+# - 翻转前一定要先确认后面有 k 个节点，不够就保持原样
+# - 每组翻转后要记住新头（接到上一组后面）和新尾（留给下一组去接）
+# - 翻转前先存 nxt（下一组的头），翻转会断开原来的指向
+# - 技巧：翻转时让 prev 初值 = nxt，尾节点自动指向下一组，不用再手动接
+# - 写链表题先理清「每一步改哪几个指针、顺序是什么」，再动手写
 #
 
 
