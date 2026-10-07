@@ -10,8 +10,8 @@
 - `LRUCache(int capacity)`：以正整数作为容量 `capacity` 初始化 LRU 缓存
 - `int get(int key)`：如果关键字 `key` 存在于缓存中，则返回关键字的值，否则返回 `-1`
 - `void put(int key, int value)`：如果关键字 `key` 已经存在，则变更其数据值 `value`；
-  如果不存在，则向缓存中插入该组 `key-value`。如果插入操作导致关键字数量超过 `capacity`，
-  则应该逐出最久未使用的关键字。
+  如果不存在，则向缓存中插入该组 `key-value`。如果插入操作导致关键字数量超过 `capacity`
+  ，则应该逐出最久未使用的关键字。
 
 函数 `get` 和 `put` 必须以 `O(1)` 的平均时间复杂度运行。
 
@@ -168,8 +168,8 @@ class LRUCache:
 #    淘汰顺序：先取 tail.prev.key 删字典，再摘节点。
 # 5. 必须是双向链表：删除任意节点需要 O(1) 拿到前驱。
 # 6. value 可能是 0：判断命中用 `key in cache`，不能用 `if not value`。
-# 7. 线程安全：get 也会改链表，所以也要加锁；临界区要覆盖「查字典 + 改链表 + 改字典」整个过程，
-#    用一把 threading.Lock 包住 get / put 入口即可（内部辅助方法不要再加锁，避免死锁）。
+# 7. 线程安全：get 也会改链表，所以也要加锁；临界区要覆盖「查字典 + 改链表 + 改字典」
+#    整个过程，用一把 threading.Lock 包住 get / put 入口即可
 #    高并发优化：分片（按 hash(key) 分段，各自一把锁）、读路径异步更新顺序。
 
 
