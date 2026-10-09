@@ -1,5 +1,5 @@
 """
-105. 从前序与中序遍历序列构造二叉树（Construct Binary Tree from Preorder and Inorder Traversal）
+105. 从前序与中序遍历序列构造二叉树
 难度：中等
 链接：https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 
