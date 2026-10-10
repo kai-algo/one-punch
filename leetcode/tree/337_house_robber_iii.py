@@ -41,8 +41,18 @@ class TreeNode:
 
 class Solution:
     def rob(self, root: Optional[TreeNode]) -> int:
-        # 在这里写解答
-        pass
+        if not root:
+            return 0
+        # skip rob & rob
+        # skip rob
+        skip_rob = self.rob(root.left) + self.rob(root.right)
+        # rob
+        rob = root.val
+        if root.left:
+            rob += self.rob(root.left.left) + self.rob(root.left.right)
+        if root.right:
+            rob += self.rob(root.right.left) + self.rob(root.right.right)
+        return max(skip_rob, rob)
 
 
 # ============ 感悟 ============

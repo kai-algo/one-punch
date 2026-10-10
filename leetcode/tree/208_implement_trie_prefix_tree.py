@@ -38,19 +38,44 @@ Trie（发音类似 "try"）或者说前缀树是一种树形数据结构，用�
 """
 
 
+class TrieNode:
+    def __init__(self):
+        self.childrens = {}
+        self.is_end = False
+
+
 class Trie:
     def __init__(self):
-        # 在这里写解答
-        pass
+        self.root = TrieNode()
 
     def insert(self, word: str) -> None:
-        pass
+        cur = self.root
+        for w in word:
+            if w not in cur.childrens:
+                cur.childrens[w] = TrieNode()
+            cur = cur.childrens[w]
+        cur.is_end = True
 
     def search(self, word: str) -> bool:
-        pass
+        cur = self.root
+        for w in word:
+            if w in cur.childrens:
+                cur = cur.childrens[w]
+            else:
+                return False
+        if cur.is_end:
+            return True
+        else:
+            return False
 
     def startsWith(self, prefix: str) -> bool:
-        pass
+        cur = self.root
+        for w in prefix:
+            if w in cur.childrens:
+                cur = cur.childrens[w]
+            else:
+                return False
+        return True
 
 
 # ============ 感悟 ============
@@ -66,45 +91,63 @@ class Trie:
 def run_tests():
     # 每个用例是一串操作 [(方法名, 参数, 期望返回值), ...]，insert 的期望为 None
     cases = [
-        ([
-            ("insert", "apple", None),
-            ("search", "apple", True),
-            ("search", "app", False),
-            ("startsWith", "app", True),
-            ("insert", "app", None),
-            ("search", "app", True),
-        ], "示例 1"),
-        ([
-            ("search", "a", False),
-            ("startsWith", "a", False),
-        ], "空 Trie：查询都应为 False"),
-        ([
-            ("insert", "a", None),
-            ("search", "a", True),
-            ("startsWith", "a", True),
-            ("search", "b", False),
-        ], "单字符"),
-        ([
-            ("insert", "apple", None),
-            ("search", "apples", False),
-            ("startsWith", "apples", False),
-            ("startsWith", "apple", True),
-        ], "查询词比已有词更长：不能越界，且整词也是自己的前缀"),
-        ([
-            ("insert", "app", None),
-            ("insert", "apple", None),
-            ("insert", "apply", None),
-            ("search", "appl", False),
-            ("startsWith", "appl", True),
-            ("search", "apple", True),
-            ("search", "apply", True),
-        ], "共享前缀：appl 只是前缀，不是单词（需要结束标记）"),
-        ([
-            ("insert", "abc", None),
-            ("insert", "abc", None),
-            ("search", "abc", True),
-            ("search", "ab", False),
-        ], "重复插入"),
+        (
+            [
+                ("insert", "apple", None),
+                ("search", "apple", True),
+                ("search", "app", False),
+                ("startsWith", "app", True),
+                ("insert", "app", None),
+                ("search", "app", True),
+            ],
+            "示例 1",
+        ),
+        (
+            [
+                ("search", "a", False),
+                ("startsWith", "a", False),
+            ],
+            "空 Trie：查询都应为 False",
+        ),
+        (
+            [
+                ("insert", "a", None),
+                ("search", "a", True),
+                ("startsWith", "a", True),
+                ("search", "b", False),
+            ],
+            "单字符",
+        ),
+        (
+            [
+                ("insert", "apple", None),
+                ("search", "apples", False),
+                ("startsWith", "apples", False),
+                ("startsWith", "apple", True),
+            ],
+            "查询词比已有词更长：不能越界，且整词也是自己的前缀",
+        ),
+        (
+            [
+                ("insert", "app", None),
+                ("insert", "apple", None),
+                ("insert", "apply", None),
+                ("search", "appl", False),
+                ("startsWith", "appl", True),
+                ("search", "apple", True),
+                ("search", "apply", True),
+            ],
+            "共享前缀：appl 只是前缀，不是单词（需要结束标记）",
+        ),
+        (
+            [
+                ("insert", "abc", None),
+                ("insert", "abc", None),
+                ("search", "abc", True),
+                ("search", "ab", False),
+            ],
+            "重复插入",
+        ),
     ]
     passed = 0
     for i, (ops, desc) in enumerate(cases, 1):
