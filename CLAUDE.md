@@ -15,7 +15,7 @@
   - 文件名：`题号_英文名.py`，英文名用 LeetCode 官方 slug 的下划线形式。
   - 选专题：优先放进已有的专题文件夹（先 `ls leetcode/` 查看）；没有合适的再新建。归类依据是这道题的**核心解法 / 套路**，而不是官方标签。拿不准归到哪一类时，先问用户。
   - 某个专题下有多道题、且有共性时，可以在该文件夹放一个 `README.md`，对比各题的特性和易错点（参考 `leetcode/prefix_suffix_decomposition/README.md`）。
-  - 现有专题：`prefix_suffix_decomposition`（前后缀分解）、`linked_list`（链表）。
+  - 现有专题：`prefix_suffix_decomposition`（前后缀分解）、`linked_list`（链表）、`tree`（树，含二叉树、BST、Trie 等）。
 - 题目描述、注释一律用中文；代码标识符（类名、函数名、变量）保持 LeetCode 原始英文签名。
 - 默认只给出题目、函数签名（`pass`）和测试用例，**不写解答**，除非用户明确要求。用户自己写解答和感悟。
 - 不要改动用户已经写过的「感悟」区和解答代码。
