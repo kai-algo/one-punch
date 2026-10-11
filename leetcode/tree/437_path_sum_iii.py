@@ -39,8 +39,34 @@ class TreeNode:
 
 class Solution:
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
-        # 在这里写解答
-        pass
+        prefix_count = {}
+        # 注意 1：必须预置 {0: 1}，代表「空前缀」，
+        # 否则从根节点出发的路径（nowSum 恰好等于 targetSum）会漏算
+        prefix_count[0] = 1
+        count = 0
+
+        def dfs(node, nowSum):
+            nonlocal count, prefix_count
+            if not node:
+                return
+            nowSum += node.val
+            # 注意 2：先查再加。当前前缀和减去某个祖先的前缀和 == targetSum，
+            # 就是一条以当前节点结尾的合法路径；先加后查的话，targetSum = 0 时会把自己算进去
+            if (nowSum - targetSum) in prefix_count:
+                count += prefix_count[nowSum - targetSum]
+            # 注意 3：节点值可为负，前缀和不单调，不能因为 nowSum 过大/过小就剪枝
+            prefix_count[nowSum] = prefix_count.get(nowSum, 0) + 1
+            dfs(node.left, nowSum)
+            dfs(node.right, nowSum)
+            # 这个很重要，防止遍历的时候左树的字典结果影响右树
+            # 注意 4：回溯 = 离开节点时撤销自己加进去的那一份，保证 prefix_count 里
+            # 始终只有「根到当前节点」这条路径上的前缀和（进来什么样，出去什么样）
+            prefix_count[nowSum] -= 1
+
+        # 注意 5：前缀和可能很大（节点值到 10^9），Python 不会溢出，换 Java/C++ 要用 long
+        dfs(root, 0)
+
+        return count
 
 
 # ============ 感悟 ============
