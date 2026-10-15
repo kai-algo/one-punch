@@ -25,9 +25,47 @@
 
 
 class Solution:
+    # 其实不用左右都搞，只需要从左往右就可以，来回两遍相当于重复计算了！
+    # def largestRectangleArea(self, heights: list[int]) -> int:
+    #     stack = []
+    #     res = 0
+    #     for i, h in enumerate([0] + heights + [0]):   # 两端补 0 做哨兵
+    #         while stack and stack[-1][1] > h:
+    #             _, top_h = stack.pop()
+    #             left = stack[-1][0]
+    #             res = max(res, top_h * (i - left - 1))
+    #         stack.append((i, h))
+    #     return res
     def largestRectangleArea(self, heights: list[int]) -> int:
-        # 在这里写解答
-        pass
+        len_h = len(heights)
+        left_stack = []
+        left_ans = [0] * len_h
+        for i, h in enumerate(heights):
+            while left_stack and heights[left_stack[-1]] > h:
+                index = left_stack.pop()
+                left_ans[index] = i - index - 1
+            left_stack.append(i)
+        while left_stack and heights[left_stack[-1]] > 0:
+            index = left_stack.pop()
+            left_ans[index] = len_h - index - 1
+
+        # print(left_ans)
+        right_stack = []
+        right_ans = [0] * len_h
+        for i in range(len_h - 1, -1, -1):
+            while right_stack and heights[right_stack[-1]] > heights[i]:
+                index = right_stack.pop()
+                right_ans[index] = index - i - 1
+            right_stack.append(i)
+        while right_stack and heights[right_stack[-1]] > 0:
+            index = right_stack.pop()
+            right_ans[index] = index
+        # print(right_ans)
+        max_rect = 0
+        for i, h in enumerate(heights):
+            max_rect = max(max_rect, h * (left_ans[i] + right_ans[i] + 1))
+
+        return max_rect
 
 
 # ============ 感悟 ============

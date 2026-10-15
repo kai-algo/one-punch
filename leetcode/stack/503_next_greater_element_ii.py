@@ -28,8 +28,19 @@
 
 class Solution:
     def nextGreaterElements(self, nums: list[int]) -> list[int]:
-        # 在这里写解答
-        pass
+        stack = []
+        res = [-1] * len(nums)
+        for i, n in enumerate(nums):
+            while stack and nums[stack[-1]] < n:
+                index = stack.pop()
+                res[index] = n
+            stack.append(i)
+        for n in nums:
+            while stack and nums[stack[-1]] < n:
+                index = stack.pop()
+                res[index] = n
+
+        return res
 
 
 # ============ 感悟 ============
